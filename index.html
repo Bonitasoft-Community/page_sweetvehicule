@@ -50,7 +50,7 @@
 <!--  Page Directory: @_PAGEDIRECTORY_@ -->
 <center>
 	<table><tr><td><h1>Delegation</h1></td><td rowspan="2"><img src="pageResource?page=custompage_sweetvehicule&location=img/remplacement.jpg" width="150" heigth="150" /></td></tr>
-		<tr><td style="font-size:0.8em">1.0</td></tr>
+		<tr><td style="font-size:0.8em">1.1</td></tr>
 	</table>
 </center>
 
@@ -67,15 +67,26 @@
 	</div>
 
 	<div>
-		Delegation : 
+		 
 		<table>
-		<tr><td ng-repeat="userinfo in ctrl.listAffectations track by $index">
-						<input type=checkbox ng-model="userinfo.show">{{userinfo.usercompletename}}</input>
+		<tr>
+			<td>Delegation :&nbsp;&nbsp;</td>
+			<td>
+				<button ng-click="ctrl.allMonitoring( false )" ng-disabled="ctrl.inprogress" class="btn btn-default btn-xs">Only my tasks</button>&nbsp;&nbsp;
+			</td>
+			
+			<td><input type=checkbox ng-model="ctrl.mytasks">My tasks&nbsp;&nbsp;</input>
+			<td ng-repeat="userinfo in ctrl.listMonitoring track by $index">
+						<input type=checkbox ng-model="userinfo.show">{{userinfo.usercompletename}}&nbsp;&nbsp;</input>
+			</td>
+			
+			<td>
+				<button ng-click="ctrl.allMonitoring( true )" ng-disabled="ctrl.inprogress" class="btn btn-default btn-xs">All</button>
 			</td>
 		</tr>
 		</table>
 	</div>
-	<button ng-click="ctrl.myTask()" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Refresh</button>
+	<button ng-click="ctrl.myTasks()" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Refresh</button>
 
 
 	<table class="table table-striped table-hover table-condensed" style="background-color:#fcf8e3">
@@ -98,7 +109,7 @@
 			<td>{{taskinfo.duedate}}</td>
 		</tr>
 	</table>
-
+	
 	<div ng-show="ctrl.managedelegation">
 		<button ng-click="ctrl.refreshDelegation()" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Refresh</button>
 	
@@ -141,7 +152,7 @@
 					<table>
 						<tr><td>RuleId</td><td colspan="2">{{ctrl.rule.ruleId}}</td></tr>
 						<tr><td>Rule</td><td colspan="2"><input type="text" ng-model="ctrl.rule.ruleName"></td></tr>
-						<tr><td>Delegator {{ctrl.isAdministrator}}</td><td>
+						<tr><td>Delegator</td><td>
 						
 						    	<div ng-show="ctrl.isAdministrator">
 									<md-autocomplete md-selected-item="ctrl.rule.selecteduser" md-search-text="ctrl.rule.delegatorCompleteName" md-items="item in ctrl.queryUser( ctrl.rule.delegatorCompleteName )" 
@@ -197,10 +208,6 @@
 				</tr>
 				</table>
 							
-				<br>
-				Rule={{ctrl.rule}}<br>
-				listevent={{ctrl.listeventsrule}}
-				
 				
 			</div>
 		</div>

@@ -382,7 +382,7 @@ public class SweetVehiculeAPI {
             logger.severe(cstLogHeader + " Exception " + e.getMessage());
             listEvents.add(new BEvent(eventAPIError, e, ""));
         }
-        result.put("listevents", listEvents);
+        result.put("listevents", BEventFactory.getHtml( listEvents) );
         return result;
     }
 

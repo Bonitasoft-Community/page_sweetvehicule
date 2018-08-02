@@ -39,34 +39,45 @@ appCommand.controller('SweetVehiculeControler',
 	
 	this.managedelegation=true;
 	// -----------------------------------------------------------------------------------------
-	//  										MyTask
+	//  										MyTasks
 	// -----------------------------------------------------------------------------------------
 
-	this.myTasks = function(searchText) {
+	this.mytasks=true;
+	
+	this.myTasks = function() {
 		var self=this;
-		console.log("QueryUser HTTP CALL["+searchText+"]");
+		console.log("myTasks");
 		this.cleanevent();
 		
 		self.inprogress=true;
-		self.autocomplete.search = searchText;
-
-		var param={ 'delegations' :  self.listdelegations};
+		if (! self.mytasks )
+			self.mytasks=false;
+		
+		var param={ 'monitoring' :  self.listMonitoring, 'mytasks': self.mytasks};
 		var json = encodeURI( angular.toJson( param, false));
 		
 		var d = new Date();
 		
-		return $http.get( '?page=custompage_sweetvehicule&action=mytasks&jsonparam='+json+'&t='+d.getTime() )
-		.then( function ( jsonResult ) {
-				self.autocomplete.inprogress=false;
-				console.log("QueryUser HTTP SUCCESS length="+self.autocomplete.listUsers.length);
-				return self.autocomplete.listUsers;
-				},  function ( jsonResult ) {
-				console.log("QueryUser HTTP THEN");
+		$http.get( '?page=custompage_sweetvehicule&action=mytasks&paramjson='+json+'&t='+d.getTime() )
+			.success( function ( jsonResult ) {
+				self.inprogress=false;
+				self.listtasks = jsonResult.listtasks;
+				console.log("myTasks.result="+angular.toJson(self.listtasks));
+			})
+			.error( function() {
+				self.inprogress=false;
 		});
+				
 
 	  };
 
-	
+	  this.allMonitoring = function( selected ) {
+		this.mytasks=true;
+		for (var i in this.listMonitoring)
+		{
+			this.listMonitoring[ i ].show = selected;
+		}
+	  }
 
 
 	<!-- Manage the event -->
@@ -122,7 +133,7 @@ appCommand.controller('SweetVehiculeControler',
 	}
 	this.removeDelegate = function( index )
 	{
-		alert("remove item "+angular.toJson(index));
+		// alert("remove item "+angular.toJson(index));
 		this.rule.delegates.splice(index, 1);
 	}
 	
@@ -234,7 +245,7 @@ appCommand.controller('SweetVehiculeControler',
 	// -----------------------------------------------------------------------------------------
 	//  										Init
 	// -----------------------------------------------------------------------------------------
-	this.display={ 'showAllRules': true, 'showMyDelegation': true, 'showMyAffectation': true}
+	this.display={ 'showAllRules': true, 'showMyDelegation': true, 'showMyAffectation': true, 'mytasks': this.mytasks}
 	this.init = function()
 	{
 
@@ -248,10 +259,11 @@ appCommand.controller('SweetVehiculeControler',
 		$http.get( '?page=custompage_sweetvehicule&action=init&paramjson='+json+'&t='+d.getTime())
 				.success( function ( jsonResult ) {
 						console.log("history",jsonResult);
-						self.listevents		= jsonResult.listevents;
-						self.listDelegations = jsonResult.listDelegations;
-						self.listAffectations = jsonResult.listAffectations;
-						self.isAdministrator =  jsonResult.isAdministrator;
+						self.listevents			= jsonResult.listevents;
+						self.listDelegations 	= jsonResult.listDelegations;
+						self.listMonitoring 	= jsonResult.listMonitoring;
+						self.isAdministrator 	= jsonResult.isAdministrator;
+						self.listtasks 			= jsonResult.listtasks;
 						
 						self.managedelegation=true;
 
