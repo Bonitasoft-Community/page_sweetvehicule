@@ -39,20 +39,23 @@ public class SweetVehiculeAPI {
     public static Logger logger = Logger.getLogger(SweetVehiculeAPI.class.getName());
 
     public static String cstLogHeader = "~~~~ SweetVehiculeAPI:";
-    private final static BEvent eventErrorJsonParsing = new BEvent(SweetVehiculeAPI.class.getName(), 1, Level.ERROR,
+    private final static BEvent EVENT_ERROR_JSONPARSING = new BEvent(SweetVehiculeAPI.class.getName(), 1, Level.ERROR,
             "Json Parsing error", "Parameters are in error", "No result to display",
             "Check exception");
-    private final static BEvent eventNoRuleFound = new BEvent(SweetVehiculeAPI.class.getName(), 2,
+    private final static BEvent EVENT_NO_RULE_FOUND = new BEvent(SweetVehiculeAPI.class.getName(), 2,
             Level.APPLICATIONERROR,
             "No rule found", "Given rule are not found", "Operation can't be done",
             "Check the rule Id");
-    private final static BEvent eventAPIError = new BEvent(SweetVehiculeAPI.class.getName(), 3, Level.APPLICATIONERROR,
+    private final static BEvent EVENT_API_ERROR = new BEvent(SweetVehiculeAPI.class.getName(), 3, Level.APPLICATIONERROR,
             "Access Error", "Error accessing information", "Information can't be retrieved",
             "Are you still connected? Verify your connection");
-    private final static BEvent eventSavedWithSucess = new BEvent(SweetVehiculeAPI.class.getName(), 4, Level.SUCCESS,
+    private final static BEvent EVENT_SAVED_WITH_SUCCESS = new BEvent(SweetVehiculeAPI.class.getName(), 4, Level.SUCCESS,
             "Rules saved", "Rules saved with success");
-    private final static BEvent eventRemovedWithSucess = new BEvent(SweetVehiculeAPI.class.getName(), 5, Level.SUCCESS,
+    private final static BEvent EVENT_REMOVED_WITH_SUCCESS = new BEvent(SweetVehiculeAPI.class.getName(), 5, Level.SUCCESS,
             "Rule removed", "Rules removed with success");
+
+    private final static BEvent EVENT_ALREADY_ASSIGNED = new BEvent(SweetVehiculeAPI.class.getName(), 6, Level.APPLICATIONERROR,
+            "Task already assigned", "It's not possible to get this task, it's already assigned to a different user", "Task is not accessible", "Ask user to free the task, or choose a different one");
 
     public static class ParameterSource {
 
@@ -95,7 +98,7 @@ public class SweetVehiculeAPI {
             if (jsonHash == null) {
                 // error during parsing
                 parameterSource.listEvents
-                        .add(new BEvent(eventErrorJsonParsing, "Json[" + parameterSource.jsonSt + "]"));
+                        .add(new BEvent(EVENT_ERROR_JSONPARSING, "Json[" + parameterSource.jsonSt + "]"));
                 return parameterSource;
             }
             // task management
@@ -189,7 +192,7 @@ public class SweetVehiculeAPI {
         } catch (Exception e) {
             logger.severe("SweetVehicule: Exception " + e.getMessage());
             List<BEvent> listEvents = new ArrayList<BEvent>();
-            listEvents.add(new BEvent(eventAPIError, e, ""));
+            listEvents.add(new BEvent(EVENT_API_ERROR, e, ""));
             result.put("listevents", BEventFactory.getHtml(listEvents));
         }
         return result;
@@ -272,7 +275,7 @@ public class SweetVehiculeAPI {
             result.put("isAdministrator", parameterSource.isadministrator);
 
         } catch (Exception e) {
-            listEvents.add(eventAPIError);
+            listEvents.add(EVENT_API_ERROR);
 
         }
         result.put("listevents", BEventFactory.getHtml(listEvents));
@@ -373,6 +376,8 @@ public class SweetVehiculeAPI {
                         oneTask.put("duedate", sdfHtml5.format(humanTaskInstance.getClaimedDate()));
                     if (userId != parameterSource.apiSession.getUserId())
                         oneTask.put("owner", getUserCompleteName(user));
+                    // Access the task
+                    oneTask.put("uritasklink", "/bonita/portal/form/taskInstance/"+humanTaskInstance.getId());
 
                     listTasks.add(oneTask);
                 }
@@ -380,7 +385,7 @@ public class SweetVehiculeAPI {
             result.put("listtasks", listTasks);
         } catch (Exception e) {
             logger.severe(cstLogHeader + " Exception " + e.getMessage());
-            listEvents.add(new BEvent(eventAPIError, e, ""));
+            listEvents.add(new BEvent(EVENT_API_ERROR, e, ""));
         }
         result.put("listevents", BEventFactory.getHtml( listEvents) );
         return result;
@@ -399,23 +404,33 @@ public class SweetVehiculeAPI {
         List<BEvent> listEvents = new ArrayList<BEvent>();
         try {
             ProcessAPI processAPI = TenantAPIAccessor.getProcessAPI(parameterSource.apiSession);
-            processAPI.assignUserTask(parameterSource.taskId, parameterSource.apiSession.getUserId());
-            result.put("isassigned", true);
-            /*
-             * HumanTaskInstance taskInstance= processAPI.getHumanTaskInstance(parameterSource.taskId);
-             * ProcessDefinition processDefinition = processAPI.getProcessDefinition( taskInstance.getProcessDefinitionId());
-             */
-            // String url = "/bonita/portal/resource/taskInstance/"+processDefinition.getName()+"/"+processDefinition.getVersion()+
-            // see https://documentation.bonitasoft.com/bonita/7.7/bonita-bpm-portal-urls#toc8
-            String url = "/bonita/portal/form/taskInstance/" + parameterSource.taskId;
-            result.put("url", url);
-
+            HumanTaskInstance humanTaskInstance = processAPI.getHumanTaskInstance(parameterSource.taskId);
+            if (humanTaskInstance.getAssigneeId()!=0 && humanTaskInstance.getAssigneeId()!= parameterSource.apiSession.getUserId())
+            {
+                // Oups, assigned to someone else !
+                IdentityAPI identityAPI = TenantAPIAccessor.getIdentityAPI(parameterSource.apiSession);
+                User user = identityAPI.getUser( humanTaskInstance.getAssigneeId()  );
+                listEvents.add( new BEvent( EVENT_ALREADY_ASSIGNED, "User["+ user.getUserName()+"]"));
+            }
+            else
+            {
+                processAPI.assignUserTask(parameterSource.taskId, parameterSource.apiSession.getUserId());
+                result.put("isassigned", true);
+                /*
+                 * HumanTaskInstance taskInstance= processAPI.getHumanTaskInstance(parameterSource.taskId);
+                 * ProcessDefinition processDefinition = processAPI.getProcessDefinition( taskInstance.getProcessDefinitionId());
+                 */
+                // String url = "/bonita/portal/resource/taskInstance/"+processDefinition.getName()+"/"+processDefinition.getVersion()+
+                // see https://documentation.bonitasoft.com/bonita/7.7/bonita-bpm-portal-urls#toc8
+                String url = "/bonita/portal/form/taskInstance/" + parameterSource.taskId;
+                result.put("url", url);
+            }
             // return "http://localhost:64176/bonita/portal/resource/taskInstance/Populate/1.0/Walter%20Bates/content/?id=60019&displayConfirmation=false";
         } catch (Exception e) {
             logger.severe(cstLogHeader + " Exception " + e.getMessage());
-            listEvents.add(new BEvent(eventAPIError, e, ""));
+            listEvents.add(new BEvent(EVENT_API_ERROR, e, ""));
         }
-        result.put("listevents", listEvents);
+        result.put("listevents", BEventFactory.getHtml( listEvents) );
         return result;
     }
 
@@ -477,12 +492,12 @@ public class SweetVehiculeAPI {
             loadResult.listDelegations = purgeDelegationsRules(loadResult.listDelegations);
             listEvents.addAll(saveDelegationRule(loadResult.listDelegations, pageResourceProvider));
             if (!BEventFactory.isError(listEvents)) {
-                listEvents.add(eventSavedWithSucess);
+                listEvents.add(EVENT_SAVED_WITH_SUCCESS);
             }
             status += "Done with success;";
 
         } catch (Exception e) {
-            listEvents.add(eventAPIError);
+            listEvents.add(EVENT_API_ERROR);
             status += "Exception " + e.getMessage();
         }
         Map<String, Object> result = new HashMap<String, Object>();
@@ -530,9 +545,9 @@ public class SweetVehiculeAPI {
             loadResult.listDelegations = purgeDelegationsRules(loadResult.listDelegations);
             loadResult.listDelegations.remove(foundIndex);
             listEvents.addAll(saveDelegationRule(loadResult.listDelegations, pageResourceProvider));
-            listEvents.add(new BEvent(eventRemovedWithSucess, "Rule [" + ruleName + "]"));
+            listEvents.add(new BEvent(EVENT_REMOVED_WITH_SUCCESS, "Rule [" + ruleName + "]"));
         } else
-            listEvents.add(new BEvent(eventNoRuleFound, "RuleId[" + parameterSource.delegationRuleId + "]"));
+            listEvents.add(new BEvent(EVENT_NO_RULE_FOUND, "RuleId[" + parameterSource.delegationRuleId + "]"));
 
         // get back the current list
         Map<String, Object> result = getListDelegation(parameterSource, pageResourceProvider);

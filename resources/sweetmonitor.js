@@ -24,7 +24,7 @@ var appCommand = angular.module('sweetmonitor', ['googlechart', 'ui.bootstrap','
 
 // --------------------------------------------------------------------------
 //
-// Controler Ping
+// Controler Sweet
 //
 // --------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ appCommand.controller('SweetVehiculeControler',
 		var self=this;
 		console.log("myTasks");
 		this.cleanevent();
-		
+		this.urlFrameTask='about:blank'; 
 		self.inprogress=true;
 		if (! self.mytasks )
 			self.mytasks=false;
@@ -70,7 +70,31 @@ appCommand.controller('SweetVehiculeControler',
 				
 
 	  };
-
+	  this.urlFrameTask='about:blank';
+	  
+	  this.accessTask =  function( taskinfo ) {
+		var self = this;
+		var d = new Date();
+		
+		self.urlFrameTask='';
+		self.inprogress=true;
+		self.cleanevent();
+		
+		var param={ 'taskId':  taskinfo.taskId };
+		var json = encodeURI( angular.toJson( param, false));
+		
+		$http.get( '?page=custompage_sweetvehicule&action=accessTask&paramjson='+json+'&t='+d.getTime() )
+			.success( function ( jsonResult ) {
+				self.inprogress=false;
+				self.urlFrameTask 			= jsonResult.url;
+				self.listeventaccesstask 	= jsonResult.listevents;
+				console.log("myTasks.result="+self.urlFrameTask);
+			})
+			.error( function() {
+				self.inprogress=false;
+		});
+	  }
+	  
 	  this.allMonitoring = function( selected ) {
 		this.mytasks=true;
 		for (var i in this.listMonitoring)
@@ -90,6 +114,7 @@ appCommand.controller('SweetVehiculeControler',
 		this.listevents='';
 		this.listeventsrule='';
 		this.listeventsruledelete='';
+		this.listeventaccesstask='';
 		
 	}
 	// -----------------------------------------------------------------------------------------
@@ -200,7 +225,8 @@ appCommand.controller('SweetVehiculeControler',
 	}
 	this.editRule = function( ruleToEdit )
 	{
-		select.listeventsruledelete='';
+		var self=this;
+		self.listeventsruledelete='';
 		self.listeventsrule='';
 		
 		// copy it please to not modify the list
@@ -209,6 +235,7 @@ appCommand.controller('SweetVehiculeControler',
 		this.rule.periodFrom = new Date(this.rule.periodFrom);
 		this.rule.periodTo = new Date(this.rule.periodTo);
 	}
+	
 	// -----------------------------------------------------------------------------------------
 	//  										Autocomplete
 	// -----------------------------------------------------------------------------------------
@@ -241,17 +268,51 @@ appCommand.controller('SweetVehiculeControler',
 		});
 
 	  };
+	  
+	// -----------------------------------------------------------------------------------------
+	//  										Capture event
+	// -----------------------------------------------------------------------------------------
 
+	  var ctrlSweet = this;
+	  this.postMessageListener = function(event) {
+			var eventData = event.data || null;
+		    if (eventData) {
+		      try {
+		        var jsonEventData = JSON.parse(eventData);
+		        //Handle the message here (propagate to parent frame)
+		        if (jsonEventData.message === 'success' && jsonEventData.targetUrlOnSuccess) {
+		        	console.log("Capture the message !");
+		        	ctrlSweet.urlFrameTask='about:blank';
+		    		window.parent.postMessage(eventData, '*');
+		        	ctrlSweet.myTasks();
+		        }
+		      } catch (e) {
+		        //The message is not json, so not for us 
+		      }
+		    }
+		  };
+		  
 	// -----------------------------------------------------------------------------------------
 	//  										Init
 	// -----------------------------------------------------------------------------------------
-	this.display={ 'showAllRules': true, 'showMyDelegation': true, 'showMyAffectation': true, 'mytasks': this.mytasks}
+	this.display={ 'showAllRules': true, 'showMyDelegation': true, 'showMyAffectation': true, 'mytasks': this.mytasks, 'showDelegationSection': false}
 	this.init = function()
 	{
 
 		var self=this;
 		self.inprogress=true;
 		this.cleanevent();
+
+		
+		// capture the event
+		// Listen to message from child window
+		if (window.addEventListener) {
+			window.addEventListener('message', this.postMessageListener, false);
+		} else if (window.attachEvent) {
+			//For IE
+			window.attachEvent('onmessage', this.postMessageListener, false);
+		}
+	
 		
 		var json = encodeURI( angular.toJson( this.display, false));
 		var d = new Date();

@@ -50,7 +50,7 @@
 <!--  Page Directory: @_PAGEDIRECTORY_@ -->
 <center>
 	<table><tr><td><h1>Delegation</h1></td><td rowspan="2"><img src="pageResource?page=custompage_sweetvehicule&location=img/remplacement.jpg" width="150" heigth="150" /></td></tr>
-		<tr><td style="font-size:0.8em">1.1</td></tr>
+		<tr><td style="font-size:0.8em">1.2</td></tr>
 	</table>
 </center>
 
@@ -58,163 +58,193 @@
 
 <!--  Page Directory: @_PAGEDIRECTORY_@ -->
 
-<div class="component col-xs-12"  ng-controller="SweetVehiculeControler as ctrl">
-	<legend class="text-primary"><span class="glyphicon glyphicon-th"></span>My Task</legend>
-
-	<div ng-show="ctrl.inprogress">
-		<span class="Loading">.</span>
-			Please wait, collect in progress
-	</div>
-
-	<div>
-		 
-		<table>
-		<tr>
-			<td>Delegation :&nbsp;&nbsp;</td>
-			<td>
-				<button ng-click="ctrl.allMonitoring( false )" ng-disabled="ctrl.inprogress" class="btn btn-default btn-xs">Only my tasks</button>&nbsp;&nbsp;
-			</td>
-			
-			<td><input type=checkbox ng-model="ctrl.mytasks">My tasks&nbsp;&nbsp;</input>
-			<td ng-repeat="userinfo in ctrl.listMonitoring track by $index">
-						<input type=checkbox ng-model="userinfo.show">{{userinfo.usercompletename}}&nbsp;&nbsp;</input>
-			</td>
-			
-			<td>
-				<button ng-click="ctrl.allMonitoring( true )" ng-disabled="ctrl.inprogress" class="btn btn-default btn-xs">All</button>
-			</td>
-		</tr>
-		</table>
-	</div>
-	<button ng-click="ctrl.myTasks()" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Refresh</button>
-
-
-	<table class="table table-striped table-hover table-condensed" style="background-color:#fcf8e3">
-		<tr>
-			<th><i class="icon-assigned" title="Available or My tasks"></i></th>
-			<th>Owner</th>
-			<th>Task Name</th>
-			<th>Description</th>						
-			<th>Case</th>
-			<th>Process Name</th>
-			<th>Due date</th>
-		</tr>
-		<tr ng-repeat="taskinfo in ctrl.listtasks track by $index">
-			<td><i ng-show="taskinfo.isassigned" class="icon-assigned" title="Available or My tasks"></td>
-			<td>{{taskinfo.owner}}</td>
-			<td>{{taskinfo.taskname}}</td>
-			<td>{{taskinfo.description}}</td>
-			<td>{{taskinfo.case}}</td>
-			<td>{{taskinfo.processname}}</td>
-			<td>{{taskinfo.duedate}}</td>
-		</tr>
-	</table>
+<div class="component"  ng-controller="SweetVehiculeControler as ctrl">
+	<div class="col-xs-6">
 	
-	<div ng-show="ctrl.managedelegation">
-		<button ng-click="ctrl.refreshDelegation()" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Refresh</button>
+		<legend class="text-primary"><span class="glyphicon glyphicon-th"></span>My Tasks</legend>
 	
-		<legend class="text-primary"><span class="glyphicon glyphicon-th"></span>Delegation</legend>
-		<table class="table table-striped table-hover table-condensed" style="background-color:#fcf8e3">
-		<tr>
-			<th>Name</th>
-			<th>Delegator</th>
-			<th>From</th>
-			<th>To</th>
-			<th>Delegates</th>						
-			<th></th>
-		</tr>
-		<tr ng-repeat="delegaterule in ctrl.listDelegations track by $index">
-			<td>{{delegaterule.ruleName}}</td>
-			<td>{{delegaterule.delegatorCompleteName}}</td>
-			<td>{{delegaterule.periodFrom | date}}</td>
-			<td>{{delegaterule.periodTo  | date}}</td>
-			<td>{{delegaterule.delegateUserSt}}</td>
-			<td> <button ng-click="ctrl.editRule(delegaterule)" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Edit</button>
-				<button ng-click="ctrl.removeRule(delegaterule)" ng-disabled="ctrl.inprogress" class="btn btn-danger btn-xs">Remove</button>
-			</td>
-		</tr>
-		</table>
-		
-		<div ng-bind-html="ctrl.getListEvents( ctrl.listeventsruledelete )"></div>
-		
-		<p>
-		<button ng-click="ctrl.addRule()" ng-disabled="ctrl.inprogress" class="btn btn-primary btn-xs">New rule</button>
-		<p>			
-		
-		<!-- Panel RULE  -->
-		<div class="panel panel-info"  >
-			<div class="panel-heading">
-				Rule
-			</div>
-			<div>
-				<table>
-				<tr><td style="valign=:top; ">
-					<table>
-						<tr><td>RuleId</td><td colspan="2">{{ctrl.rule.ruleId}}</td></tr>
-						<tr><td>Rule</td><td colspan="2"><input type="text" ng-model="ctrl.rule.ruleName"></td></tr>
-						<tr><td>Delegator</td><td>
-						
-						    	<div ng-show="ctrl.isAdministrator">
-									<md-autocomplete md-selected-item="ctrl.rule.selecteduser" md-search-text="ctrl.rule.delegatorCompleteName" md-items="item in ctrl.queryUser( ctrl.rule.delegatorCompleteName )" 
-										md-item-text="item.display" md-delay="500"
-									 	md-floating-label="User"
-					    				md-clear-button="false" 
-					    				style="width:300px" 
-					    				md-menu-class="AutocompleteDropDown">
-										  <span md-highlight-text="ctrl.rule.delegatorCompleteName">{{item.display}}</span>
-									</md-autocomplete>
-								</div>
-								<div ng-show="! ctrl.isAdministrator">
-									{{ctrl.rule.delegatorCompleteName}}
-								</div>
-							</td><td>
-									<span ng-show="ctrl.autocomplete.inprogress"   class="Loading"></span>
-								</td></tr>
-						<tr><td>From</td><td colspan="2"><input type="date" ng-model="ctrl.rule.periodFrom"></td></tr>
-						<tr><td>To</td>  <td colspan="2"><input type="date" ng-model="ctrl.rule.periodTo"></td></tr>
-					</table>
-				</td><td  style="valign=:top; ">
-						Delegates
-						<table>
-							<tr ng-repeat="delegate in ctrl.rule.delegates">
-								<td>
-									<md-autocomplete md-selected-item="delegate.selecteduser" md-search-text="delegate.delegateCompleteName" md-items="item in ctrl.queryUser( delegate.delegateCompleteName )" 
-									md-item-text="item.display" md-delay="500"
-								 	md-floating-label="User"
-				    				md-clear-button="false" 
-				    				style="width:300px" 
-				    				md-menu-class="AutocompleteDropDown">
-									  <span md-highlight-text="delegate.delegateCompleteName">{{item.display}}</span>
-								</md-autocomplete>
-								</td>
-								<td>
-									<span ng-show="ctrl.autocomplete.inprogress"   class="Loading"></span>
-									<button ng-click="ctrl.removeDelegate($index)" ng-disabled="ctrl.inprogress" class="btn btn-danger btn-xs">Remove</button>		
-								</td>
-							</tr>
-						</table>
-						<button ng-click="ctrl.addDelegate(ctrl.rule)" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Add</button>
-				</td></tr>	
+		<div ng-show="ctrl.inprogress">
+			<span class="Loading">.</span>
+				Please wait, collect in progress
+		</div>
+	
+		<div>
+			 
+			<table>
+			<tr>
+				<td>Delegation :&nbsp;&nbsp;</td>
+				<td>
+					<button ng-click="ctrl.allMonitoring( false )" ng-disabled="ctrl.inprogress" class="btn btn-default btn-xs">Only my tasks</button>&nbsp;&nbsp;
+				</td>
 				
-				<tr><td colspan="2">
-					<center><button ng-click="ctrl.saveRule(ctrl.rule)" ng-disable="ctrl.inprogress" class="btn btn-success btn-lg">Save</button>
-							<span ng-show="ctrl.inprogress"   class="Loading"></span>
-					</center>
-					</td>
-				</tr><tr>
-					<td  colspan="2">
-						<div ng-bind-html="ctrl.getListEvents( ctrl.listeventsrule )"></div>
+				<td><input type=checkbox ng-model="ctrl.mytasks">My tasks&nbsp;&nbsp;</input>
+				<td ng-repeat="userinfo in ctrl.listMonitoring track by $index">
+							<input type=checkbox ng-model="userinfo.show">{{userinfo.usercompletename}}&nbsp;&nbsp;</input>
+				</td>
+				
+				<td>
+					<button ng-click="ctrl.allMonitoring( true )" ng-disabled="ctrl.inprogress" class="btn btn-default btn-xs">All</button>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<button ng-click="ctrl.myTasks()" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Refresh</button>
+	
+	
+		<table class="table table-striped table-hover table-condensed" style="background-color:#fcf8e3">
+			<tr>
+				<th></th>
+				<th><i class="icon-assigned" title="Available or My tasks"></i></th>
+				<th>Owner</th>
+				<th>Task Name</th>
+				<th>Description</th>						
+				<th>Case</th>
+				<th>Process Name</th>
+				<th>Due date</th>
+			</tr>
+			<tr ng-repeat="taskinfo in ctrl.listtasks track by $index">
+				<td>
+					<button ng-click="ctrl.accessTask(taskinfo)" class="btn btn-primary btn-xs">Access</button>
+				</td>
+				<td><i ng-show="taskinfo.isassigned" class="glyphicon glyphicon-user" title="Available or My tasks">
+				</td>
+				<td>{{taskinfo.owner}}</td>
+				<td>{{taskinfo.taskname}}</td>
+				<td>{{taskinfo.description}}</td>
+				<td>{{taskinfo.case}}</td>
+				<td>{{taskinfo.processname}}</td>
+				<td>{{taskinfo.duedate | date}}</td>
+				
+			</tr>
+		</table>
+			
+		<div ng-bind-html="ctrl.getListEvents( ctrl.listeventaccesstask )"></div>
+			
+		<hr>
+		
+			
+		<div ng-show="ctrl.managedelegation">
+			
+			<a href="#" ng-click="ctrl.display.showDelegationSection = ! ctrl.display.showDelegationSection" style="text-decoration:none">					
+	  				<span ng-show="ctrl.display.showDelegationSection" class="glyphicon glyphicon-chevron-down"></span>
+	 				</a>
+			<a href="#" ng-click="ctrl.display.showDelegationSection = ! ctrl.display.showDelegationSection" style="text-decoration:none">					
+					<span ng-show="! ctrl.display.showDelegationSection" class="glyphicon glyphicon-chevron-right" ></span>
+			</a>
+			<div class="label label-default">Delegation</div>
+		
+			<div ng-show="ctrl.display.showDelegationSection">
+				<legend class="text-primary"><span class="glyphicon glyphicon-th"></span>Delegation</legend>
+				<button ng-click="ctrl.refreshDelegation()" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Refresh</button>
+				<table class="table table-striped table-hover table-condensed" style="background-color:#fcf8e3">
+				<tr>
+					<th>Name</th>
+					<th>Delegator</th>
+					<th>From</th>
+					<th>To</th>
+					<th>Delegates</th>						
+					<th></th>
+				</tr>
+				<tr ng-repeat="delegaterule in ctrl.listDelegations track by $index">
+					<td>{{delegaterule.ruleName}}</td>
+					<td>{{delegaterule.delegatorCompleteName}}</td>
+					<td>{{delegaterule.periodFrom | date}}</td>
+					<td>{{delegaterule.periodTo  | date}}</td>
+					<td>{{delegaterule.delegateUserSt}}</td>
+					<td> <button ng-click="ctrl.editRule(delegaterule)" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Edit</button>
+						<button ng-click="ctrl.removeRule(delegaterule)" ng-disabled="ctrl.inprogress" class="btn btn-danger btn-xs">Remove</button>
 					</td>
 				</tr>
 				</table>
-							
 				
-			</div>
-		</div>
+				<div ng-bind-html="ctrl.getListEvents( ctrl.listeventsruledelete )"></div>
+				
+				<p>
+				<button ng-click="ctrl.addRule()" ng-disabled="ctrl.inprogress" class="btn btn-primary btn-xs">New rule</button>
+				<p>			
+				
+				<!-- Panel RULE  -->
+				<div class="panel panel-info"  >
+					<div class="panel-heading">
+						Rule
+					</div>
+					<div>
+						<table>
+						<tr><td style="valign=:top; ">
+							<table>
+								<tr><td>RuleId</td><td colspan="2">{{ctrl.rule.ruleId}}</td></tr>
+								<tr><td>Rule</td><td colspan="2"><input type="text" ng-model="ctrl.rule.ruleName"></td></tr>
+								<tr><td>Delegator</td><td>
+								
+								    	<div ng-show="ctrl.isAdministrator">
+											<md-autocomplete md-selected-item="ctrl.rule.selecteduser" md-search-text="ctrl.rule.delegatorCompleteName" md-items="item in ctrl.queryUser( ctrl.rule.delegatorCompleteName )" 
+												md-item-text="item.display" md-delay="500"
+											 	md-floating-label="User"
+							    				md-clear-button="false" 
+							    				style="width:300px" 
+							    				md-menu-class="AutocompleteDropDown">
+												  <span md-highlight-text="ctrl.rule.delegatorCompleteName">{{item.display}}</span>
+											</md-autocomplete>
+										</div>
+										<div ng-show="! ctrl.isAdministrator">
+											{{ctrl.rule.delegatorCompleteName}}
+										</div>
+									</td><td>
+											<span ng-show="ctrl.autocomplete.inprogress"   class="Loading"></span>
+										</td></tr>
+								<tr><td>From</td><td colspan="2"><input type="date" ng-model="ctrl.rule.periodFrom"></td></tr>
+								<tr><td>To</td>  <td colspan="2"><input type="date" ng-model="ctrl.rule.periodTo"></td></tr>
+							</table>
+						</td><td  style="valign=:top; ">
+								Delegates
+								<table>
+									<tr ng-repeat="delegate in ctrl.rule.delegates">
+										<td>
+											<md-autocomplete md-selected-item="delegate.selecteduser" md-search-text="delegate.delegateCompleteName" md-items="item in ctrl.queryUser( delegate.delegateCompleteName )" 
+											md-item-text="item.display" md-delay="500"
+										 	md-floating-label="User"
+						    				md-clear-button="false" 
+						    				style="width:300px" 
+						    				md-menu-class="AutocompleteDropDown">
+											  <span md-highlight-text="delegate.delegateCompleteName">{{item.display}}</span>
+										</md-autocomplete>
+										</td>
+										<td>
+											<span ng-show="ctrl.autocomplete.inprogress"   class="Loading"></span>
+											<button ng-click="ctrl.removeDelegate($index)" ng-disabled="ctrl.inprogress" class="btn btn-danger btn-xs">Remove</button>		
+										</td>
+									</tr>
+								</table>
+								<button ng-click="ctrl.addDelegate(ctrl.rule)" ng-disabled="ctrl.inprogress" class="btn btn-info btn-xs">Add</button>
+						</td></tr>	
+						
+						<tr><td colspan="2">
+							<center><button ng-click="ctrl.saveRule(ctrl.rule)" ng-disable="ctrl.inprogress" class="btn btn-success btn-lg">Save</button>
+									<span ng-show="ctrl.inprogress"   class="Loading"></span>
+							</center>
+							</td>
+						</tr><tr>
+							<td  colspan="2">
+								<div ng-bind-html="ctrl.getListEvents( ctrl.listeventsrule )"></div>
+							</td>
+						</tr>
+						</table>
+									
+						
+					</div>
+				</div> <!--  end panel rule -->
+			</div> <!--  end showDelegationSection -->
+		</div> <!--  end manageDelegationSection -->
 		
+
+	</div> <!--  end panel Task + Rule -->
+	
+	<div class="col-xs-6">
+		<div ng-show="! ctrl.inprogress">
+		<iframe src="{{ctrl.urlFrameTask}}" width="100%" height="500px">
+		</iframe>
+		</div>
 	</div>
-	
-	
 
 </div>
 

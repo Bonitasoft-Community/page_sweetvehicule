@@ -155,7 +155,16 @@ public class Actions {
               
                 actionAnswer.responseMap  = sweetVehiculeAPI.getMyTasks(parameterSource, pageResourceProvider);
                 
+            }            
+            else if ("accessTask".equals(action)) 
+            {
+                SweetVehiculeAPI.ParameterSource parameterSource= SweetVehiculeAPI.ParameterSource.getInstanceFromJson( apiSession, paramJsonSt);
+                SweetVehiculeAPI sweetVehiculeAPI = SweetVehiculeAPI.getInstance();
+              
+                actionAnswer.responseMap  = sweetVehiculeAPI.accessTask(parameterSource, pageResourceProvider);
+                
             }
+            
             else if ("refreshdelegation".equals(action))
             {
                 SweetVehiculeAPI.ParameterSource parameterSource= SweetVehiculeAPI.ParameterSource.getInstanceFromJson( apiSession, paramJsonSt);
