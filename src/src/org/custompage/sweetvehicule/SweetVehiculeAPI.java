@@ -312,7 +312,8 @@ public class SweetVehiculeAPI {
         Map<String, Object> result = new HashMap<String, Object>();
         List<Map<String, Object>> listTasks = new ArrayList<Map<String, Object>>();
         List<BEvent> listEvents = new ArrayList<BEvent>();
-
+        // a task may be visible by multiple user - filter it
+        Set<Long> tasksRegisters = new HashSet<Long>();
         List<Long> listUsers = new ArrayList<Long>();
         try {
             if (parameterSource.myTasks) {
@@ -356,6 +357,10 @@ public class SweetVehiculeAPI {
                     collectList.addAll(searchResult.getResult());
                 }
                 for (HumanTaskInstance humanTaskInstance : collectList) {
+                  // already registered ? Skip it.
+                  if (tasksRegisters.contains(humanTaskInstance.getId()))
+                      continue;
+                  tasksRegisters.add( humanTaskInstance.getId() );
                     Map<String, Object> oneTask = new HashMap<String, Object>();
                     oneTask.put("taskId", humanTaskInstance.getId());
                     oneTask.put("isassigned",
