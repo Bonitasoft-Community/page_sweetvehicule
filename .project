@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>page_sweetVehicule</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>custompage/7.7 0710/Actions.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_53160@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Actions.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0710/Index.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_53160@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Index.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0710/index.html</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_53160@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/index.html</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0710/sweetmonitor.js</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_53160@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/resources/sweetmonitor.js</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0711/Actions.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_56828@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Actions.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0711/Index.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_56828@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Index.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0711/index.html</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_56828@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/index.html</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0711/sweetmonitor.js</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_56828@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/resources/sweetmonitor.js</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0712/Actions.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_11276@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Actions.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0712/Index.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_11276@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Index.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0712/index.html</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_11276@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/index.html</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0712/sweetmonitor.js</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_11276@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/resources/sweetmonitor.js</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0713/Actions.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_14196@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Actions.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0713/index.html</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_14196@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/index.html</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0713/sweetmonitor.js</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_14196@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/resources/sweetmonitor.js</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0801/Actions.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_24176@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Actions.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0801/index.html</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_24176@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/index.html</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0801/sweetmonitor.js</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_24176@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/resources/sweetmonitor.js</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0807/Actions.groovy</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_49932@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/Actions.groovy</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0807/index.html</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_49932@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/index.html</locationURI>
+		</link>
+		<link>
+			<name>custompage/7.7 0807/sweetmonitor.js</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/bonita/BPM-SP-7.7.1/workspace/tomcat/server/temp/bonita_portal_49932@Dragon-Pierre-Yves/tenants/1/pages/custompage_sweetvehicule/resources/sweetmonitor.js</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

@@ -1,6 +1,5 @@
 package org.custompage.sweetvehicule;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.bonitasoft.engine.api.IdentityAPI;
-import org.bonitasoft.engine.identity.User;
 import org.json.simple.JSONValue;
 
 /* -------------------------------------------------------------------- */
@@ -107,6 +104,7 @@ public class DelegationRule {
         ruleName = (String) record.get(cstjsonRuleName);
         periodFrom = SweetVehiculeAPI.getDateValue( record.get(cstjsonPeriodFrom),null);
         periodTo = SweetVehiculeAPI.getDateValue( record.get(cstjsonPeriodTo),null );
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         List<Long> listDelegates=(List)record.get(cstjsonDelegatesLong);
         if (listDelegates!=null)
         {
@@ -133,6 +131,7 @@ public class DelegationRule {
     /* -------------------------------------------------------------------- */
     public static DelegationRule getInstanceFromJson( String jsonSt)
     {
+        @SuppressWarnings("unchecked")
         Map<String, Object> record = (Map<String, Object>) JSONValue.parse(jsonSt);
         return getInstance(record);
     }
