@@ -6,7 +6,7 @@
 (function() {
 
 
-var appCommand = angular.module('sweetmonitor', ['googlechart', 'ui.bootstrap','ngSanitize', 'ngModal', 'ngMaterial']);
+var appCommand = angular.module('sweetmonitor', ['googlechart', 'ui.bootstrap','ngSanitize', 'ngModal', 'ngMaterial', 'ngCookies']);
 
 
 /* Material : for the autocomplete
@@ -30,7 +30,7 @@ var appCommand = angular.module('sweetmonitor', ['googlechart', 'ui.bootstrap','
 
 // Ping the server
 appCommand.controller('SweetVehiculeControler',
-	function ( $http, $scope,$sce,$filter ) {
+	function ( $http, $scope,$sce,$filter, $cookies ) {
 
 	this.listdelegations=[
 		{ 'title' : 'Jan Ficher'},
@@ -38,6 +38,18 @@ appCommand.controller('SweetVehiculeControler',
 	];
 	
 	this.managedelegation=true;
+	this.getHttpConfig = function () {
+		var additionalHeaders = {};
+		var csrfToken = $cookies.get('X-Bonita-API-Token');
+		if (csrfToken) {
+			additionalHeaders ['X-Bonita-API-Token'] = csrfToken;
+		}
+		var config= {"headers": additionalHeaders};
+		console.log("GetHttpConfig : "+angular.toJson( config));
+		return config;
+	}
+	
+
 	// -----------------------------------------------------------------------------------------
 	//  										MyTasks
 	// -----------------------------------------------------------------------------------------
@@ -58,7 +70,7 @@ appCommand.controller('SweetVehiculeControler',
 		
 		var d = new Date();
 		
-		$http.get( '?page=custompage_sweetvehicule&action=mytasks&paramjson='+json+'&t='+d.getTime() )
+		$http.get( '?page=custompage_sweetvehicule&action=mytasks&paramjson='+json+'&t='+d.getTime(),  this.getHttpConfig() )
 			.success( function ( jsonResult ) {
 				self.inprogress=false;
 				self.listtasks = jsonResult.listtasks;
@@ -83,7 +95,7 @@ appCommand.controller('SweetVehiculeControler',
 		var param={ 'taskId':  taskinfo.taskId };
 		var json = encodeURI( angular.toJson( param, false));
 		
-		$http.get( '?page=custompage_sweetvehicule&action=accessTask&paramjson='+json+'&t='+d.getTime() )
+		$http.get( '?page=custompage_sweetvehicule&action=accessTask&paramjson='+json+'&t='+d.getTime(),  this.getHttpConfig() )
 			.success( function ( jsonResult ) {
 				self.inprogress=false;
 				self.urlFrameTask 			= jsonResult.url;
@@ -128,7 +140,7 @@ appCommand.controller('SweetVehiculeControler',
 		var json = encodeURI( angular.toJson( this.display, false));
 		var d = new Date();
 	
-		$http.get( '?page=custompage_sweetvehicule&action=refreshdelegation&paramjson='+json+'&t='+d.getTime())
+		$http.get( '?page=custompage_sweetvehicule&action=refreshdelegation&paramjson='+json+'&t='+d.getTime(),  this.getHttpConfig())
 				.success( function ( jsonResult ) {
 						console.log("history",jsonResult);
 						self.listevents		= jsonResult.listevents;
@@ -176,7 +188,7 @@ appCommand.controller('SweetVehiculeControler',
 		var d = new Date();
 		
 		
-		return $http.get( '?page=custompage_sweetvehicule&action=saverule&paramjson='+json+'&t='+d.getTime() )
+		return $http.get( '?page=custompage_sweetvehicule&action=saverule&paramjson='+json+'&t='+d.getTime(),  this.getHttpConfig() )
 		.success( function ( jsonResult ) {
 				self.inprogress=false;
 				self.listeventsrule = jsonResult.listevents;
@@ -210,7 +222,7 @@ appCommand.controller('SweetVehiculeControler',
 		var d = new Date();
 		
 		
-		return $http.get( '?page=custompage_sweetvehicule&action=removerule&paramjson='+json+'&t='+d.getTime() )
+		return $http.get( '?page=custompage_sweetvehicule&action=removerule&paramjson='+json+'&t='+d.getTime(),  this.getHttpConfig() )
 		.success( function ( jsonResult ) {
 				self.inprogress=false;
 				self.listeventsruledelete = jsonResult.listevents;
@@ -255,7 +267,7 @@ appCommand.controller('SweetVehiculeControler',
 		// 7.6 : the server force a cache on all URL, so to bypass the cache, then create a different URL
 		var d = new Date();
 		
-		return $http.get( '?page=custompage_sweetvehicule&action=queryusers&paramjson='+json+'&t='+d.getTime() )
+		return $http.get( '?page=custompage_sweetvehicule&action=queryusers&paramjson='+json+'&t='+d.getTime(),  this.getHttpConfig() )
 		.then( function ( jsonResult ) {
 				self.autocomplete.inprogress=false;
 			 	self.autocomplete.listUsers =  jsonResult.data.listUsers;
@@ -317,7 +329,7 @@ appCommand.controller('SweetVehiculeControler',
 		var json = encodeURI( angular.toJson( this.display, false));
 		var d = new Date();
 	
-		$http.get( '?page=custompage_sweetvehicule&action=init&paramjson='+json+'&t='+d.getTime())
+		$http.get( '?page=custompage_sweetvehicule&action=init&paramjson='+json+'&t='+d.getTime(),  this.getHttpConfig())
 				.success( function ( jsonResult ) {
 						console.log("history",jsonResult);
 						self.listevents			= jsonResult.listevents;
